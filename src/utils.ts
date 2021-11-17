@@ -168,8 +168,8 @@ export async function getMessagesByUserIn(client: MatrixClient, sender: string, 
     }
 }
 
-export async function replaceRoomIdsWithPills(client: MatrixClient, text: string, roomIds: string[] | string, msgtype: MessageType = "m.text"): Promise<TextualMessageEventContent> {
-    if (!Array.isArray(roomIds)) roomIds = [roomIds];
+export async function replaceRoomIdsWithPills(client: MatrixClient, text: string, roomIds: Set<string> | string, msgtype: MessageType = "m.text"): Promise<TextualMessageEventContent> {
+    if (typeof(roomIds) !== typeof(Set)) roomIds = new Set<string>([roomIds]);
 
     const content: TextualMessageEventContent = {
         body: text,

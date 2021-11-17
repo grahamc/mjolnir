@@ -35,7 +35,7 @@ export async function logMessage(level: LogLevel, module: string, message: strin
         if (level === LogLevel.WARN) clientMessage = `⚠ | ${message}`;
         if (level === LogLevel.ERROR) clientMessage = `‼ | ${message}`;
 
-        const roomIds = [config.managementRoom, ...additionalRoomIds];
+        const roomIds = new Set([config.managementRoom, ...additionalRoomIds]);
         const client = config.RUNTIME.client;
 
         let evContent: TextualMessageEventContent = {
