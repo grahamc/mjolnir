@@ -48,12 +48,10 @@ export async function execSetProtection(roomId: string, event: any, mjolnir: Mjo
 
         if (defaultSettings[settingName] === undefined) {
             console.log("nonexistent setting");
-        }
-        else if (typeof(defaultSettings[settingName]) === 'number'
-                && (settingInt = parseInt(value)) !== NaN) {
+        } else if (typeof(defaultSettings[settingName]) === 'number'
+                && (settingInt = parseInt(value, 10)) !== NaN) {
             newSettings[settingName] = settingInt;
-        }
-        else {
+        } else {
             message = `Type mismatch (should be ${typeof(defaultSettings[settingName])})`;
         }
 
