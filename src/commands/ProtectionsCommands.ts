@@ -49,7 +49,7 @@ export async function execSetProtection(roomId: string, event: any, mjolnir: Mjo
         if (defaultSettings[settingName] === undefined) {
             message = `Unknown setting ${settingName}`;
         } else if (typeof(defaultSettings[settingName]) === 'number'
-                && (settingInt = parseInt(value, 10)) !== NaN) {
+                && !isNaN(settingInt = Number(value))) {
             newSettings[settingName] = settingInt;
         } else {
             message = `Type mismatch (should be ${typeof(defaultSettings[settingName])})`;
