@@ -417,7 +417,6 @@ export class Mjolnir {
         const enabledProtections = Object.fromEntries(this.protections.map(p => [p.name, p]));
         if (protectionName in enabledProtections) {
             enabledProtections[protectionName].settings = combo;
-            console.log("updated live module");
         }
     }
 

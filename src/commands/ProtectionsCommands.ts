@@ -47,7 +47,7 @@ export async function execSetProtection(roomId: string, event: any, mjolnir: Mjo
         let message = "did nothing";
 
         if (defaultSettings[settingName] === undefined) {
-            console.log("nonexistent setting");
+            message = `Unknown setting ${settingName}`;
         } else if (typeof(defaultSettings[settingName]) === 'number'
                 && (settingInt = parseInt(value, 10)) !== NaN) {
             newSettings[settingName] = settingInt;
