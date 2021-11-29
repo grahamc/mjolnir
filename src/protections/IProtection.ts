@@ -24,5 +24,6 @@ import { Mjolnir } from "../Mjolnir";
  */
 export interface IProtection {
     readonly name: string;
+    settings: { [setting: string]: any };
     handleEvent(mjolnir: Mjolnir, roomId: string, event: any): Promise<any>;
 }

@@ -33,6 +33,40 @@ export async function execEnableProtection(roomId: string, event: any, mjolnir: 
     }
 }
 
+export async function execSetProtection(roomId: string, event: any, mjolnir: Mjolnir, parts: string[]) {
+    const [protectionName, ...settingParts] = parts[2].split(".");
+    const protection = PROTECTIONS[protectionName];
+    if (protection !== undefined) {
+        const defaultSettings = protection.factory().settings
+        const settingName = settingParts[0];
+        const value = parts[3];
+
+        let newSettings: { [settingName: string]: any } = {}
+        let settingInt = 0;
+
+        let message = "did nothing";
+
+        if (defaultSettings[settingName] === undefined) {
+            console.log("nonexistent setting");
+        }
+        else if (typeof(defaultSettings[settingName]) === 'number'
+                && (settingInt = parseInt(value)) !== NaN) {
+            newSettings[settingName] = settingInt;
+        }
+        else {
+            message = `Type mismatch (should be ${typeof(defaultSettings[settingName])})`;
+        }
+
+        if (Object.keys(newSettings).length > 0) {
+            await mjolnir.setProtectionSettings(protectionName, newSettings);
+            message = `Changed ${protectionName}.${settingName} to ${value}`;
+        }
+        const reply = RichReply.createFor(roomId, event, message, message);
+        reply["msgtype"] = "m.notice";
+        await mjolnir.client.sendMessage(roomId, reply);
+    }
+}
+
 // !mjolnir disable <protection>
 export async function execDisableProtection(roomId: string, event: any, mjolnir: Mjolnir, parts: string[]) {
     await mjolnir.disableProtection(parts[2]);

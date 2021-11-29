@@ -399,12 +399,40 @@ export class Mjolnir {
         }
     }
 
+    public async getProtectionSettings(protectionName: string): Promise<{ [setting: string]: any }> {
+        const eventName = `org.matrix.mjolnir.set.${protectionName}`;
+        return await this.client.getRoomStateEvent(config.managementRoom, eventName, "").catch(err => {
+        }) || {};
+    }
+    public async setProtectionSettings(protectionName: string, changedSettings: { [setting: string]: any }): Promise<any> {
+        const eventName = `org.matrix.mjolnir.set.${protectionName}`;
+        const settings = await this.getProtectionSettings(protectionName);
+
+        const combo = {
+            ...settings,
+            ...changedSettings
+        }
+        await this.client.sendStateEvent(config.managementRoom, eventName, "", combo);
+
+        const enabledProtections = Object.fromEntries(this.protections.map(p => [p.name, p]));
+        if (protectionName in enabledProtections) {
+            enabledProtections[protectionName].settings = combo;
+            console.log("updated live module");
+        }
+    }
+
     public async enableProtection(protectionName: string, persist = true): Promise<any> {
         const definition = PROTECTIONS[protectionName];
         if (!definition) throw new Error("Failed to find protection by name: " + protectionName);
 
         const protection = definition.factory();
         this.protections.push(protection);
+
+        protection.settings = {
+            ...protection.settings,
+            // todo: validate this data
+            ...(await this.getProtectionSettings(protectionName))
+        }
 
         if (persist) {
             const existing = this.protections.map(p => p.name);

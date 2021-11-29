@@ -28,6 +28,8 @@ export class BasicFlooding implements IProtection {
     private lastEvents: { [roomId: string]: { [userId: string]: { originServerTs: number, eventId: string }[] } } = {};
     private recentlyBanned: string[] = [];
 
+    settings = {maxPerMinute: 10};
+
     constructor() {
     }
 

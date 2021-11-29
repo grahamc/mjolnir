@@ -28,7 +28,7 @@ import { execRedactCommand } from "./RedactCommand";
 import { execImportCommand } from "./ImportCommand";
 import { execSetDefaultListCommand } from "./SetDefaultBanListCommand";
 import { execDeactivateCommand } from "./DeactivateCommand";
-import { execDisableProtection, execEnableProtection, execListProtections } from "./ProtectionsCommands";
+import { execDisableProtection, execEnableProtection, execListProtections, execSetProtection } from "./ProtectionsCommands";
 import { execListProtectedRooms } from "./ListProtectedRoomsCommand";
 import { execAddProtectedRoom, execRemoveProtectedRoom } from "./AddRemoveProtectedRoomsCommand";
 import { execAddRoomToDirectoryCommand, execRemoveRoomFromDirectoryCommand } from "./AddRemoveRoomFromDirectoryCommand";
@@ -76,6 +76,8 @@ export async function handleCommand(roomId: string, event: any, mjolnir: Mjolnir
             return await execEnableProtection(roomId, event, mjolnir, parts);
         } else if (parts[1] === 'disable' && parts.length > 1) {
             return await execDisableProtection(roomId, event, mjolnir, parts);
+        } else if (parts[1] === 'set' && parts.length > 1) {
+            return await execSetProtection(roomId, event, mjolnir, parts)
         } else if (parts[1] === 'rooms' && parts.length > 3 && parts[2] === 'add') {
             return await execAddProtectedRoom(roomId, event, mjolnir, parts);
         } else if (parts[1] === 'rooms' && parts.length > 3 && parts[2] === 'remove') {
